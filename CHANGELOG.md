@@ -1,6 +1,10 @@
 # Changelog
 
-## 1.0.0 (unreleased)
+## 1.0.1
+
+- README: animated showcase demos (Mood Wall, Big Feelings, Good Company), also shown on the npm page. No icon changes.
+
+## 1.0.0
 
 First public release: 112 animated faces as SVG, still SVG, PNG, GIF and WebP, a GitHub Pages catalogue with copy and download actions, and an npm package.
 
