@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2
+
+- README: the two square demos move to the Showcase media section; Mood Wall stays at the top.
+
 ## 1.0.1
 
 - README: animated showcase demos (Mood Wall, Big Feelings, Good Company), also shown on the npm page. No icon changes.
