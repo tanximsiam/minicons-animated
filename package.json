@@ -1,0 +1,38 @@
+{
+  "name": "minicons-animated",
+  "version": "1.0.0",
+  "description": "112 minimal animated face emoticons as SVG, PNG, GIF and WebP.",
+  "keywords": [
+    "emoji",
+    "emoticons",
+    "icons",
+    "animated",
+    "svg",
+    "faces",
+    "emotions"
+  ],
+  "license": "MIT",
+  "author": "Tanzim Siam (https://github.com/tanximsiam)",
+  "homepage": "https://tanximsiam.github.io/minicons-animated/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tanximsiam/minicons-animated.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tanximsiam/minicons-animated/issues"
+  },
+  "main": "manifest.json",
+  "exports": {
+    ".": "./manifest.json",
+    "./manifest.json": "./manifest.json",
+    "./*": "./*"
+  },
+  "files": [
+    "animated",
+    "static",
+    "png",
+    "gif",
+    "webp",
+    "manifest.json"
+  ]
+}

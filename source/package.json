@@ -1,0 +1,9 @@
+{
+  "name": "minicons-animated-face-pack",
+  "private": true,
+  "version": "0.3.0",
+  "dependencies": {
+    "sharp": "0.35.5",
+    "playwright": "1.62.1"
+  }
+}
