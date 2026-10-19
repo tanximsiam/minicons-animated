@@ -4,7 +4,14 @@
 
 112 minimal, animated face emoticons. Small faces, full feelings.
 
-![Eight Minicons in motion](motion-preview.webp)
+<p align="center">
+  <img src="https://raw.githubusercontent.com/tanximsiam/minicons-animated/main/media/mood-wall.webp" width="720" alt="A wall of Minicons faces moving gently, with one featured expression">
+</p>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/tanximsiam/minicons-animated/main/media/big-feelings.gif" width="360" alt="Six close-up Minicons expressions sliding in turn">
+  <img src="https://raw.githubusercontent.com/tanximsiam/minicons-animated/main/media/good-company.gif" width="360" alt="Eight Minicons reactions orbiting a happy face">
+</p>
 
 **Browse, copy and download:** https://tanximsiam.github.io/minicons-animated/
 
@@ -68,6 +75,10 @@ python source/export_raster.py              # animated WebP + GIF
 ```
 
 Set `CHROMIUM_EXECUTABLE_PATH` to use an existing Chromium. `source/build_pack.py` holds the drawing specifications; edit a face there and rebuild.
+
+## Showcase media
+
+The demo loops at the top of this page are in [`media/`](media) as GIF, animated WebP and silent MP4 (9.6-second loops, 20 fps). Their editable source is in [`media/source/`](media/source). These files are not included in the npm package.
 
 ## Hosting the site
 
