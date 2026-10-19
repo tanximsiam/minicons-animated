@@ -1,5 +1,5 @@
 {
-  "version": "0.4.0",
+  "version": "0.4.1",
   "entries": 112,
   "originalCoreNames": 32,
   "animatedSvgFilesParsed": 112,
@@ -30,7 +30,7 @@
   "loopChecks": {
     "comparison": "frame 0 ms against frame 4800 ms",
     "threshold": "at most 0.1% of pixels per face differ by over 5/255",
-    "maxChangedPixelsPerFace": 14,
+    "maxChangedPixelsPerFace": 12,
     "changedPixelsPerFace": {
       "happy": 0,
       "joyful": 0,
@@ -89,9 +89,9 @@
       "bittersweet": 0,
       "holding-back-tears": 0,
       "pleading": 0,
-      "loudly-crying": 14,
+      "loudly-crying": 0,
       "heartbroken": 0,
-      "devastated": 12,
+      "devastated": 0,
       "pensive": 0,
       "regretful": 0,
       "disheartened": 0,
@@ -123,7 +123,7 @@
       "yawning": 5,
       "drooling": 0,
       "nauseated": 0,
-      "vomiting": 8,
+      "vomiting": 0,
       "feverish": 0,
       "cold-face": 0,
       "overheated": 0,
@@ -149,22 +149,34 @@
   },
   "visualReview": "All 112 stills reviewed; full motion cycles captured at 20 fps. Deep-blue crying and revised Peeking reviewed at mid-cycle. Original light preview layout checked on desktop and mobile.",
   "latestRevision": {
-    "name": "Minicons Animated",
-    "updatedExpressions": [
-      "saluting",
-      "shushing",
-      "thinking",
-      "celebrating"
-    ],
-    "approvedArtworkGeometryMatches": true,
-    "all112ExportSetsValidated": true,
-    "loopSeamChangedPixels": {
-      "saluting": 0,
-      "shushing": 0,
-      "thinking": 0,
-      "celebrating": 0
+    "name": "Chin-anchored fluid streams",
+    "checks": {
+      "framesChecked": 97,
+      "fixedBoundary": true,
+      "sourcesFollowFeatures": true,
+      "chinContactFailures": {
+        "before": {
+          "vomiting": 53,
+          "loudly-crying": 79,
+          "devastated": 42
+        },
+        "after": {
+          "vomiting": 0,
+          "loudly-crying": 0,
+          "devastated": 0
+        }
+      },
+      "updatedExpressions": [
+        "vomiting",
+        "loudly-crying",
+        "devastated"
+      ]
     },
-    "remaining108ExpressionsUnchanged": true,
-    "portableSourceRebuildMatches": true
+    "loopSeamChangedPixels": {
+      "vomiting": 0,
+      "loudly-crying": 0,
+      "devastated": 0
+    },
+    "unaffectedAssetsUnchanged": true
   }
 }

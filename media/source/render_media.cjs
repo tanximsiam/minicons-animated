@@ -5,7 +5,8 @@ const root=__dirname;
 const scenes=[['wall',960,540],['closeup',720,720],['orbit',720,720]];
 async function main(){
  const browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_EXECUTABLE_PATH||undefined,args:['--no-sandbox']});
- for(const [scene,width,height] of scenes){
+ const requested=process.argv.find(x=>x.startsWith('--scenes='))?.slice(9).split(',');
+ for(const [scene,width,height] of scenes.filter(x=>!requested||requested.includes(x[0]))){
   const folder=path.join(root,'frames',scene);fs.mkdirSync(folder,{recursive:true});
   const page=await browser.newPage({viewport:{width,height},deviceScaleFactor:1});
   page.on('pageerror',e=>{throw e});

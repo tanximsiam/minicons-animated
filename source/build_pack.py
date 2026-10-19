@@ -233,14 +233,9 @@ def fx_art(s):
     """Returns behind-face and in-front artwork. Clip IDs are namespaced."""
     rear='';front='';prefix='f-'+s['id'];HAND='#F8B66D';CREASE='#D58A3F'
     for effect in s['effects']:
-        if effect=='vomit':
-            shape='M27.5 39.6H36.5L37.2 58.5Q36.8 61 34.5 60.7Q32 62 29.5 60.7Q26.5 61 26.8 58.5Z'
-            clip=prefix+'-vomit-clip'
-            front+=f'<defs><clipPath id="{clip}" clipPathUnits="userSpaceOnUse"><path d="{shape}"/></clipPath></defs>'+g(path(shape,P['green'],'none')+f'<g clip-path="url(#{clip})">'+path('M29.5 38Q28.7 46 29.8 54T29.5 67',stroke=P['lime'],w=2.1,cls='vomit-flow flow-a')+path('M34 38Q35 46 33.8 54T34 67',stroke='#CFEAB4',w=1.35,cls='vomit-flow flow-b')+path('M31.8 37V68',stroke='#9DCE6B',w=1,cls='vomit-flecks')+'</g>','vomit-stream')
-        elif effect=='cry-streams':
-            shape='M20.6 31.8H25.4L25.8 48.4Q24.8 52.8 25.6 57.7Q23.4 60 20.4 58Q20.9 52 20.2 47Z M38.6 31.8H43.4L43.9 47Q42.8 52 43.6 58Q41.2 60.1 38.3 57.9Q39.1 52 38.2 47.5Z'
-            clip=prefix+'-cry-clip'
-            rear+=f'<defs><clipPath id="{clip}" clipPathUnits="userSpaceOnUse"><path d="{shape}"/></clipPath></defs>'+path(shape,'#1565C0','none')+f'<g clip-path="url(#{clip})">'+path('M22.2 30Q23.2 41 22.4 49T22.5 70',stroke='#F4FCFF',w=1.9,cls='cry-flow flow-a')+path('M41 29Q39.8 39 41.2 48T40.8 70',stroke='#F4FCFF',w=1.7,cls='cry-flow flow-b')+path('M24.6 30V70 M38.8 29V70',stroke='#3C8BDF',w=.8,cls='cry-flow flow-c')+'</g>'
+        if effect in ['vomit','cry-streams']:
+            # These layers use a stationary face-boundary clip, outside .pose.
+            continue
         elif effect=='tear':front+=g(drop(44,35),'tear-drop')
         elif effect=='joy-tears':front+=g(drop(18,34),'joy-drop joy-left')+g(drop(46,34),'joy-drop joy-right')
         elif effect=='sweat':front+=g(drop(46,21),'sweat-drop')
@@ -321,6 +316,28 @@ def fx_art(s):
         elif effect in ['heart-eyes','star-eyes','tongue','savor','wink','double-blink']:pass
         else:raise ValueError(effect)
     return rear,front
+
+def anchored_stream_art(s):
+    """Move the source with the features; pin its exit to the fixed head outline.
+
+    Extending the liquid past the chin allows the outer, stationary circular
+    clip to define its lower edge throughout every facial translation/rotation.
+    The inner clip confines flowing highlights to the liquid channel itself.
+    """
+    p='f-'+s['id']
+    if 'vomit' in s['effects']:
+        shape='M27.5 38.8H36.5L37.2 58.5L37.2 80H26.8V58.5Z'
+        color=P['green'];clip=p+'-vomit-clip'
+        flow=path('M29.5 38Q28.7 46 29.8 54T29.5 79',stroke=P['lime'],w=2.1,cls='vomit-flow flow-a')+path('M34 38Q35 46 33.8 54T34 79',stroke='#CFEAB4',w=1.35,cls='vomit-flow flow-b')+path('M31.8 37V80',stroke='#9DCE6B',w=1,cls='vomit-flecks')
+    elif 'cry-streams' in s['effects']:
+        shape='M20.6 31H25.4L25.8 48.4Q25 54 25.6 62L25.8 80H20.2L20.4 62Q20.9 52 20.2 47Z M38.6 31H43.4L43.9 47Q42.8 53 43.6 62L43.9 80H38.2L38.3 62Q39.1 52 38.2 47.5Z'
+        color='#1565C0';clip=p+'-cry-clip'
+        flow=path('M22.2 30Q23.2 41 22.4 49T22.5 80',stroke='#F4FCFF',w=1.9,cls='cry-flow flow-a')+path('M41 29Q39.8 39 41.2 48T40.8 80',stroke='#F4FCFF',w=1.7,cls='cry-flow flow-b')+path('M24.6 30V80 M38.8 29V80',stroke='#3C8BDF',w=.8,cls='cry-flow flow-c')
+    else:return ''
+    boundary=p+'-chin-boundary'
+    defs=f'<defs><clipPath id="{boundary}" clipPathUnits="userSpaceOnUse"><circle cx="32" cy="32" r="30"/></clipPath><clipPath id="{clip}" clipPathUnits="userSpaceOnUse"><path d="{shape}"/></clipPath></defs>'
+    liquid=path(shape,color,'none',cls='stream-body')+f'<g clip-path="url(#{clip})">'+flow+'</g>'
+    return defs+f'<g class="chin-anchor" clip-path="url(#{boundary})">'+g(liquid,'pose stream-source')+'</g>'
 
 def face_detail_css(s):
  id=s['id'];out=''
@@ -478,7 +495,7 @@ def svg_for(s,animated=True):
         head=path('M4 24L11 26L18 23L25 26L32 23L39 26L46 23L60 25C65 45 49 62 32 62C15 62-1 45 4 24Z',s['color'],'none')+g(path('M6 23C10 3 54 3 58 23L46 21L39 24L32 21L25 24L18 21L11 24Z',s['color'],'none'),'head-cap')
     floating=party_air_art() if s['id']=='celebrating' else ''
     if floating:front=front.replace(floating,'')
-    body=head+g(rear+g(brow_art(s['brow']),'brows')+g(eye,'gaze')+lip+front,'pose')+floating
+    body=head+anchored_stream_art(s)+g(rear+g(brow_art(s['brow']),'brows')+g(eye,'gaze')+lip+front,'pose')+floating
     # Optical framing keeps the approved artwork inside a 64-unit export canvas.
     view_box={'saluting':'-1.1 -1.1 64 64','celebrating':'.9 -1.4 64 64'}.get(s['id'],'0 0 64 64')
     svg=f'<svg xmlns="http://www.w3.org/2000/svg" class="emoji {p}" viewBox="{view_box}" width="64" height="64" role="img" aria-label="{html.escape(s["name"],quote=True)}">'+('<style>'+css_for(s)+'</style>' if animated else '')+body+'</svg>'
@@ -492,7 +509,7 @@ def main():
         for animated,kind in [(True,'animated'),(False,'static')]:
             (OUT/item[kind]).write_text(svg_for(spec,animated),encoding='utf-8')
         catalog.append(dict(item,svg=svg_for(spec),still=svg_for(spec,False)))
-    data=dict(name='Minicons Animated',version='1.0.0',total=len(SPECS),grid=64,headRadius=30,faceInk=INK,palette=P,masterCycle=CYCLE,scope='Emotion-based face emoticons only',items=[{k:v for k,v in x.items() if k not in ['svg','still']} for x in catalog])
+    data=dict(name='Minicons Animated',version='1.0.3',total=len(SPECS),grid=64,headRadius=30,faceInk=INK,palette=P,masterCycle=CYCLE,scope='Emotion-based face emoticons only',items=[{k:v for k,v in x.items() if k not in ['svg','still']} for x in catalog])
     (OUT/'manifest.json').write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     template=(ROOT/'catalog.html').read_text(encoding='utf-8');raw=template.replace('__CATALOG_DATA__',json.dumps(catalog,ensure_ascii=False,separators=(',',':')).replace('</','<\\/'))
     (OUT/'index.html').write_text(raw,encoding='utf-8')

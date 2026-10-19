@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.3
+
+- **Vomiting:** the stream stays attached to the chin through the whole retching cycle.
+- **Loudly Crying / Devastated:** the tear channels follow the eyes and stay attached to the chin, including during head tilts.
+- Showcase media re-rendered with the corrected faces.
+- Website: link-preview banner for sharing.
+
 ## 1.0.2
 
 - README: the two square demos move to the Showcase media section; Mood Wall stays at the top.

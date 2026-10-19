@@ -1,6 +1,6 @@
 # Minicons Animated — motion showcase media
 
-Three original animated compositions using the approved Minicons Animated 0.4.0 artwork.
+Three original animated compositions using the approved Minicons Animated 0.4.1 artwork.
 All loops last 9.6 seconds at 20 frames per second. All three have a light paper background.
 
 - Minicons_Mood_Wall: 960 × 540. A gently moving wall with a featured expression.

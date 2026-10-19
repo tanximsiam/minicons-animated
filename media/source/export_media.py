@@ -4,12 +4,14 @@ from PIL import Image, ImageChops
 import subprocess
 import json
 import zipfile
+import sys
 
 ROOT = Path(__file__).resolve().parent
 EXPORTS = ROOT / 'exports'
 EXPORTS.mkdir(exist_ok=True)
 SCENES = [('wall', 'Minicons_Mood_Wall'), ('closeup', 'Minicons_Big_Feelings'), ('orbit', 'Minicons_Good_Company')]
 report = []
+refresh = next((a.split('=',1)[1].split(',') for a in sys.argv if a.startswith('--refresh=')), [])
 
 def run(args):
     subprocess.run(['ffmpeg','-hide_banner','-loglevel','error','-y', *args],check=True)
@@ -25,9 +27,9 @@ for scene, name in SCENES:
     assert seam_maximum <= 4, (scene, 'Loop seam mismatch',seam_maximum)
     inp = ['-framerate','20','-i',str(frames / '%04d.png'),'-frames:v','192']
     gif = EXPORTS / (name+'.gif')
-    if not gif.exists():run(inp+['-filter_complex','[0:v]split[a][b];[a]palettegen=max_colors=256:stats_mode=full[p];[b][p]paletteuse=dither=bayer:bayer_scale=4:diff_mode=rectangle','-loop','0',str(gif)])
-    if not (EXPORTS / (name+'.mp4')).exists():run(inp+['-c:v','libx264','-crf','18','-preset','slow','-pix_fmt','yuv420p','-movflags','+faststart','-an',str(EXPORTS / (name+'.mp4'))])
-    if not (EXPORTS / (name+'.webp')).exists():run(inp+['-c:v','libwebp_anim','-quality','88','-compression_level','5','-loop','0',str(EXPORTS / (name+'.webp'))])
+    if scene in refresh or not gif.exists():run(inp+['-filter_complex','[0:v]split[a][b];[a]palettegen=max_colors=256:stats_mode=full[p];[b][p]paletteuse=dither=bayer:bayer_scale=4:diff_mode=rectangle','-loop','0',str(gif)])
+    if scene in refresh or not (EXPORTS / (name+'.mp4')).exists():run(inp+['-c:v','libx264','-crf','18','-preset','slow','-pix_fmt','yuv420p','-movflags','+faststart','-an',str(EXPORTS / (name+'.mp4'))])
+    if scene in refresh or not (EXPORTS / (name+'.webp')).exists():run(inp+['-c:v','libwebp_anim','-quality','88','-compression_level','5','-loop','0',str(EXPORTS / (name+'.webp'))])
     im=Image.open(gif)
     duration=0
     for i in range(im.n_frames):
@@ -40,7 +42,7 @@ for scene, name in SCENES:
 (ROOT / 'validation.json').write_text(json.dumps(report,indent=2))
 readme='''# Minicons Animated — motion showcase media
 
-Three original animated compositions using the approved Minicons Animated 0.4.0 artwork.
+Three original animated compositions using the approved Minicons Animated 0.4.1 artwork.
 All loops last 9.6 seconds at 20 frames per second. All three have a light paper background.
 
 - Minicons_Mood_Wall: 960 × 540. A gently moving wall with a featured expression.
